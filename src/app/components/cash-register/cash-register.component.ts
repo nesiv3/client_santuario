@@ -27,11 +27,13 @@ export class CashRegisterComponent implements OnInit {
   barcodeInput = new FormControl('');
   barNameInput = new FormControl('');
   products: Product[] = [];
+  selectedProduct: Product | null = null;
   setProduct: Product[] = [];
   isModalOpen = false;
   cashReceived: number = 0;
   change: number = 0;
   selectedCustomer!: Customer;
+  modalVisible: boolean = false;
 
   shoppingData = {
         date: new Date(),
@@ -43,8 +45,6 @@ export class CashRegisterComponent implements OnInit {
         total_sale: 0,
         detail_shoppings: [] as DetailShoppings[]
     };
-
-    modalVisible: boolean = false;
 
     constructor(
         private shoppingService: ShoppingService,
@@ -86,7 +86,7 @@ export class CashRegisterComponent implements OnInit {
         searchProduct(){
             this.barNameInput.valueChanges
             .pipe(
-                debounceTime(300), // ⏳ Espera 300ms después de la última pulsación
+                debounceTime(500), // ⏳ Espera 500ms después de la última pulsación
                 distinctUntilChanged(), // ⚡ Solo busca si el valor cambia
                 switchMap(value => {
             if (!value || value.trim() === '') {
@@ -106,9 +106,75 @@ export class CashRegisterComponent implements OnInit {
              });
         }
 
-       selectProduct(/* product: Product */){
+       selectProduct() {
+        const inputValue = this.barNameInput.value; // Obtener el valor del input
+            
+        if (!inputValue || inputValue.trim() === '') {
+            alert("Debe seleccionar un producto válido.");
+            return;
+        }       
+       
+        const productName = this.setProduct.find(p => p.name === inputValue);       
+            if (productName) {
+                this.selectedProduct = productName; // Guardar el producto seleccionado
+                console.log("Producto seleccionado:", this.selectedProduct);
+            } else {
+                alert("Producto no encontrado en la lista. Asegúrese de seleccionarlo correctamente.");
+            }
+        }
 
-       }
+        addToCart() {
+            if (!this.selectedProduct) {
+                alert("No hay un producto seleccionado para agregar.");
+                return;
+            }
+        
+            const product = this.selectedProduct;
+        
+            const existingProductIndex = this.shoppingData.detail_shoppings.findIndex(p => p.id_products === product.id_products);
+            console.log("Índice encontrado:", existingProductIndex);
+        
+            if (existingProductIndex !== -1) {
+                // El producto ya está en la lista, actualizar cantidad y total
+                console.log("Producto existente, actualizando...");
+                this.shoppingData.detail_shoppings = this.shoppingData.detail_shoppings.map((item, index) => {
+                    if (index === existingProductIndex) {
+                        const updatedCount = item.count + 1;
+                        const taxRate = item.value_taxes / 100;
+                        return {
+                            ...item,
+                            count: updatedCount,
+                            total: updatedCount * item.unit_price * (1 + taxRate)
+                        };
+                    }
+                    return item;
+                });
+            
+            } else {
+                // Si no existe, agregar nuevo producto
+                const taxRate = (product.taxes_code ?? 0) / 100; // Convertir a porcentaje
+                const earnRate = (product.code_earn ?? 0) / 100;
+            
+                const newItem: DetailShoppings = {
+                    id_products: product.id_products ?? 0,
+                    code: product.code,
+                    name: product.name ?? 'Nombre no disponible',
+                    count: 1, // Se inicializa en 1
+                    unit_price: product.buy_price * (1 + earnRate),
+                    buy_price: product.buy_price,
+                    code_earn: product.code_earn,
+                    value_taxes: product.taxes_code ?? 0, // Guardar el porcentaje sin calcular
+                    total: 1 * product.buy_price * (1 + earnRate) * (1 + taxRate) // Incluir cantidad (1) desde el inicio
+                };
+            
+                this.shoppingData.detail_shoppings = [...this.shoppingData.detail_shoppings, newItem]; // Se reasigna el array
+            }
+        
+            this.calculateTotals();
+            this.barNameInput.setValue(''); // Limpiar el input después de agregar
+            this.selectedProduct = null; // Resetear la selección
+        }
+
     
     // 🔹 Agregado: Escanear productos por código de barras
         scanProduct() {
