@@ -1,0 +1,33 @@
+<!-- Contenedor oculto para impresión -->
+<div id="invoice" style="display: none">
+  <h2 class="text-center">Factura</h2>
+  <p class="text-end"><strong>Fecha:</strong> {{ today | date : "short" }}</p>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>Producto ID</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of shoppingData.detail_shoppings">
+          <td>{{ item.id_products }}</td>
+          <td>{{ item.count }}</td>
+          <td>{{ item.unit_price | currency }}</td>
+          <td>{{ item.total | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="text-end">
+    <strong>Subtotal:</strong> {{ shoppingData.subtotal | currency }}
+  </p>
+  <h3 class="text-end text-success">
+    <strong>Total:</strong> {{ shoppingData.total_sale | currency }}
+  </h3>
+</div>
