@@ -6,6 +6,8 @@ export interface DetailShoppings {
   code?: string;  
   count: number;
   unit_price: number;
+  buy_price: number;
+  code_earn: number;
   value_taxes: number;
   total: number
 }

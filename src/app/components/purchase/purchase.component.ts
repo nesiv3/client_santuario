@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { PurchasesService } from '../../Services/purchases/purchases.service';
-import { ProductService } from '../../Services/product/product.service';
+import { PurchasesService } from '../../services/purchases/purchases.service';
+import { ProductService } from '../../services/product/product.service';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Product } from '../../models/product';
 import { Supplier } from '../../models/supplier';

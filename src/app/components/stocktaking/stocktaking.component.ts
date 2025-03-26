@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProductService } from '../../Services/product/product.service';
+import { ProductService } from '../../services/product/product.service';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { Product } from '../../models/product';

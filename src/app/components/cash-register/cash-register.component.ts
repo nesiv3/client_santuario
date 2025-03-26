@@ -1,17 +1,17 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Product } from '../../models/product';
-import { DetailShoppings } from '../../models/detailShoppings';
-import { ProductService } from '../../Services/product/product.service';
-import { ShoppingService } from '../../Services/shopping/shopping.service';
-import { CashRegisterSummaryComponent } from '../cash-register-summary/cash-register-summary.component';
-import { Shopping } from '../../models/shoppings';
+import { ProductService } from '../../services/product/product.service';
+import { ShoppingService } from '../../services/shopping/shopping.service';
 import { UsersService } from '../../services/users/users.service';
-import { User } from '../../models/user';
-import { lastValueFrom } from 'rxjs';
-import { CashRegisterCustomerComponent } from '../cash-register-customer/cash-register-customer.component';
+import { DetailShoppings } from '../../models/detailShoppings';
+import { Product } from '../../models/product';
+import { Shopping } from '../../models/shoppings';
 import { Customer } from '../../models/customer';
+import { User } from '../../models/user';
+import { CashRegisterSummaryComponent } from '../cash-register-summary/cash-register-summary.component';
+import { CashRegisterCustomerComponent } from '../cash-register-customer/cash-register-customer.component';
 
 @Component({
     selector: 'app-cash-register',
@@ -21,11 +21,13 @@ import { Customer } from '../../models/customer';
     styleUrl: './cash-register.component.css'
 })
 
-export class CashRegisterComponent {
+export class CashRegisterComponent implements OnInit {
   today: Date = new Date();
   purchaseSummary: Product[] = [];
   barcodeInput = new FormControl('');
+  barNameInput = new FormControl('');
   products: Product[] = [];
+  setProduct: Product[] = [];
   isModalOpen = false;
   cashReceived: number = 0;
   change: number = 0;
@@ -49,6 +51,10 @@ export class CashRegisterComponent {
         private productService: ProductService,
         private usersService: UsersService
     ) {}
+
+    ngOnInit(): void {
+        this.searchProduct();
+    }
 
     // autentificación de cajero
     async userId(): Promise<number> {
@@ -75,6 +81,34 @@ export class CashRegisterComponent {
     this.selectedCustomer = customer;  // 🔴 Guardar los datos del cliente
     console.log('Cliente recibido en el padre:', this.selectedCustomer);
     }
+
+    // 🔹 Buscar producto de forma sensitiva
+        searchProduct(){
+            this.barNameInput.valueChanges
+            .pipe(
+                debounceTime(300), // ⏳ Espera 300ms después de la última pulsación
+                distinctUntilChanged(), // ⚡ Solo busca si el valor cambia
+                switchMap(value => {
+            if (!value || value.trim() === '') {
+                this.setProduct = []; // Limpia la lista si no hay valor
+                return []; // Evita la llamada si el input está vacío
+            }
+            return this.productService.getProductByName(value);
+            }))
+            .subscribe({
+                next: (products) => {
+                    this.setProduct = products ?? []; // Asegura que siempre haya un array
+                },
+                error: (error) => {
+                    console.error("Error en la búsqueda de productos:", error);
+                    this.setProduct = []; // Limpia la lista en caso de error
+                }
+             });
+        }
+
+       selectProduct(/* product: Product */){
+
+       }
     
     // 🔹 Agregado: Escanear productos por código de barras
         scanProduct() {
@@ -119,12 +153,15 @@ export class CashRegisterComponent {
                 } else {
                     // Si no existe, agregar nuevo producto
                     const taxRate = (product.taxes_code ?? 0) / 100; // Convertir a porcentaje
+                    const earnRate = (product.code_earn ?? 0) / 100
                     const newItem: DetailShoppings = {
                         id_products: product.id_products ?? 0,
                         code: product.code,
                         name: product.name ?? 'Nombre no disponible',
                         count: 1, // Se inicializa en 1
-                        unit_price: product.unit_price,
+                        unit_price: product.buy_price * (1 + earnRate),
+                        buy_price: product.buy_price,
+                        code_earn: product.code_earn,
                         value_taxes: product.taxes_code ?? 0, // Guardar el porcentaje sin calcular
                         total: 1 * product.unit_price * (1 + taxRate) // Incluir cantidad (1) desde el inicio
                     };
