@@ -6,6 +6,7 @@ import { SupplierComponent } from './components/supplier/supplier.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { UsersComponent } from './components/users/users.component';
 import { PurchaseComponent } from './components/purchase/purchase.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -15,7 +16,7 @@ export const routes: Routes = [
   { path: 'purchase', component: PurchaseComponent },
   { path: 'supplier', component: SupplierComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'admin', component: UsersComponent },
+  { path: 'admin', component: AdminComponent },
   { path: '**', redirectTo: 'home' } 
 ];
 
