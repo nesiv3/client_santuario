@@ -1,11 +1,10 @@
 <div>
   <div class="d-flex justify-content-between bg-custom p-3">
     <a class="navbar-brand fw-bold mx-4" routerLink="/">El Santuario 2001</a>
-    <a class="navbar-brand fw-bold mx-3" routerLink="/">
-      <button class="btn btn-bg-custom" type="button">
-        Cerrar seccion <i class="bi bi-person-circle"></i>
-      </button>
-    </a>
+    <li class="nav-item" *ngIf="authService.isLoggedIn()">
+      <a class="nav-link" href="#"  (click)="logout()">Cerrar sesión</a>
+    </li>
+    
   </div>
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">

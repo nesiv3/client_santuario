@@ -1,4 +1,8 @@
-<div>
-  <nav-bar></nav-bar>
+<div *ngIf="authService.isLoggedIn(); else loginTemplate">
+  <nav-bar></nav-bar> <!-- Navbar solo si está autenticado -->
   <router-outlet></router-outlet>
 </div>
+
+<ng-template #loginTemplate>
+  <router-outlet></router-outlet> <!-- Solo se verá el login -->
+</ng-template>

@@ -6,16 +6,22 @@ import { SupplierComponent } from './components/supplier/supplier.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { UsersComponent } from './components/users/users.component';
 import { PurchaseComponent } from './components/purchase/purchase.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'cash', component: CashRegisterComponent },
-  { path: 'inventory', component: StocktakingComponent },
-  { path: 'purchase', component: PurchaseComponent },
-  { path: 'supplier', component: SupplierComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'admin', component: UsersComponent },
-  { path: '**', redirectTo: 'home' } 
+  // { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent,canActivate: [AuthGuard] },
+  { path: 'cash', component: CashRegisterComponent,canActivate: [AuthGuard] },
+  { path: 'inventory', component: StocktakingComponent,canActivate: [AuthGuard] },
+  { path: 'purchase', component: PurchaseComponent,canActivate: [AuthGuard] },
+  { path: 'supplier', component: SupplierComponent,canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent,canActivate: [AuthGuard] },
+  { path: 'admin', component: UsersComponent,canActivate: [AuthGuard] },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, 
+  { path: '**', redirectTo: 'login' } 
+  // { path: '**', redirectTo: 'home' } 
+  
 ];
 
