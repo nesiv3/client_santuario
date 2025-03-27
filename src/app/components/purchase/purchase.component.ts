@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-purchase',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule], // ✅ Importarlo aquí
+  imports: [ReactiveFormsModule, FormsModule, CommonModule], 
   templateUrl: './purchase.component.html',
   styleUrls: ['./purchase.component.css']
 })
