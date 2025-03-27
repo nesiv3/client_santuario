@@ -11,11 +11,12 @@ import { User } from '../../models/user';
 export class UsersService {
 
   private USERS_URL = environment.USERS_URL;
+  private ALL_USERS_URL = environment.ALL_USERS_URL;
 
   constructor(private http: HttpClient) { }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.USERS_URL).pipe(
+    return this.http.get<User[]>(this.ALL_USERS_URL).pipe(
       map(response => response),
       catchError(this.handleError)
     );
@@ -30,28 +31,28 @@ export class UsersService {
   }
 
   getUserByName(username: string): Observable<User[]> {
-    return this.http.get<User[]>(`${this.USERS_URL}`, { params: { username } }).pipe(
+    return this.http.get<User[]>(`${this.ALL_USERS_URL}/name/`, { params: { username } }).pipe(
       map(response => response),
       catchError(this.handleError)
     );
   }
 
   createUser(data: User): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(this.USERS_URL, data).pipe(
+    return this.http.post<{ message: string }>(this.ALL_USERS_URL, data).pipe(
       map(response => response),
       catchError(this.handleError)
     );
   }
 
   editUser(user_id: number, data: Partial<User>): Observable<{ message: string }> {
-    return this.http.put<{ message: string }>(`${this.USERS_URL}/${user_id}`, data).pipe(
+    return this.http.put<{ message: string }>(`${this.ALL_USERS_URL}/${user_id}`, data).pipe(
       map(response => response),
       catchError(this.handleError)
     );
   }
 
   toggleUserActive(user_id: number): Observable<{ message: string }> {
-    return this.http.put<{ message: string }>(`${this.USERS_URL}/${user_id}/toggle-active`, {}).pipe(
+    return this.http.put<{ message: string }>(`${this.ALL_USERS_URL}/${user_id}/toggle-active`, {}).pipe(
       map(response => response),
       catchError(this.handleError)
     );

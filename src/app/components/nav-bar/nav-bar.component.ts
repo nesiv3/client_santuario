@@ -6,7 +6,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 
     standalone: true,
     imports: [ RouterLink],
-
     templateUrl: './nav-bar.component.html',
     styleUrls: ['./nav-bar.component.css']
 })

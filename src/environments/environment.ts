@@ -20,6 +20,7 @@
     PURCHASES_URL: 'https://el-santuario-api.onrender.com/purchases',
     SHOPPING_URL: 'https://el-santuario-api.onrender.com/shoppings',
     USERS_URL: 'https://el-santuario-api.onrender.com/manager/byid',
+    ALL_USERS_URL: 'https://el-santuario-api.onrender.com/manager',
     DETAIL_SHOPPING_URL: 'https://el-santuario-api.onrender.com/detail-shopping',
     DETAIL_PURCHASES_URL: 'https://el-santuario-api.onrender.com/detail-purchases'
 
