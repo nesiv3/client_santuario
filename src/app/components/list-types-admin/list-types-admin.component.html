@@ -1,0 +1,35 @@
+<div
+  class="container-fluid d-flex justify-content-center align-items-center mt-5"
+>
+  <div class="col">
+    <button class="btn btn-secondary my-1 float-end">
+      Registrar Tipo de usuario
+    </button>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Rol</th>
+          <th scope="col">Activado/Desactivado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let type of typesUsersApi">
+          <td>{{ type.id_userType }}</td>
+          <td>{{ type.rol }}</td>
+          <td>
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="active"
+                checked
+              />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
