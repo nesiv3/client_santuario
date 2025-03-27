@@ -54,6 +54,7 @@ export class CashRegisterComponent implements OnInit {
 
     ngOnInit(): void {
         this.searchProduct();
+        this.userId();
     }
 
     // autentificación de cajero
@@ -77,8 +78,8 @@ export class CashRegisterComponent implements OnInit {
     }
 
     setCustomerData(customer: Customer) {
-    console.log('Cliente recibido en el padre:', customer);
     this.selectedCustomer = customer;  // 🔴 Guardar los datos del cliente
+    
     console.log('Cliente recibido en el padre:', this.selectedCustomer);
     }
 
