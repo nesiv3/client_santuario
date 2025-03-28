@@ -9,6 +9,7 @@ import { PurchaseComponent } from './components/purchase/purchase.component';
 
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AdminComponent } from './components/admin/admin.component';
 
 export const routes: Routes = [
   // { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,7 +20,7 @@ export const routes: Routes = [
   { path: 'purchase', component: PurchaseComponent,canActivate: [AuthGuard] },
   { path: 'supplier', component: SupplierComponent,canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent,canActivate: [AuthGuard] },
-  { path: 'admin', component: UsersComponent,canActivate: [AuthGuard] },
+  { path: 'admin', component: AdminComponent,canActivate: [AuthGuard] },
   { path: '', redirectTo: 'login', pathMatch: 'full' }, 
   { path: '**', redirectTo: 'login' } 
   // { path: '**', redirectTo: 'home' } 
