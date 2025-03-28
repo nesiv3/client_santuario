@@ -1,34 +1,55 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { User } from '../../models/user';
+import { environment } from '../../../environments/environment';
+import { TypeUserService } from '../typeUser/type-user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isAuthenticated = false;
-  // private USERS_URL = environment.USERS_URL;
+  private isAuth = false;
+  private USERS_URL = environment.USERS_URL; 
 
-  constructor(private http: HttpClient,private router: Router) {}
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private serviceTypeUsers: TypeUserService
+  ) {}
 
-  login(username: string, password: string): boolean {
-    if (username === 'admin' && password === '1234') { 
-      this.isAuthenticated = true;
-      localStorage.setItem('user', 'true');
-      this.router.navigate(['/home']);
-      return true;
+  // Guarda el estado de autenticación
+  setAuthStatus(status: boolean): void {
+    this.isAuth = status;
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('isAuth', status.toString());
+    }
+  }
+
+  // Verifica si el usuario está autenticado
+  isAuthenticated(): boolean {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('isAuth') === 'true';
     }
     return false;
   }
-
-  logout(): void {
-    this.isAuthenticated = false;
-    localStorage.removeItem('user');
-    this.router.navigate(['/login']);
+  
+  // Llamada al backend para autenticar al usuario
+  onLogin(username: string, password: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.USERS_URL}?username=${username}&password=${password}`);
   }
 
   isLoggedIn(): boolean {
-    return localStorage.getItem('user') === 'true';
+    return this.isAuthenticated();
+  }
+
+  // Cierra sesión y limpia los datos almacenados
+  logout(): void {
+    this.isAuth = false;
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('isAuth');
+    }
+    this.router.navigate(['/login']);
   }
 }
