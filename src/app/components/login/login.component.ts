@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UsersService } from '../../services/users/users.service';
+import { Router } from '@angular/router';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-login',
@@ -9,15 +12,45 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  username = '';
-  password = '';
 
-  constructor(private authService: AuthService) {}
+export class LoginComponent implements OnInit {
+  username: string = '';
+  password: string = '';
+  errorMessage: string = '';
+  listUsers: User[] = [];
+
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.chargeUsers1();
+  }
+
+  chargeUsers1(): void {
+    this.usersService.getAllUsers().subscribe({
+      next: (users) => {
+        this.listUsers = users || [];
+      },
+      error: (error) => {
+        console.error('Error al obtener usuarios:', error);
+        this.listUsers = [];
+      }
+    });
+  }
 
   onLogin(): void {
-    if (!this.authService.login(this.username, this.password)) {
-      alert('Usuario o contraseña incorrectos');
+    const foundUser = this.listUsers.find(
+      user => user.username === this.username && user.password === this.password
+    );
+    
+    if (foundUser) {
+      this.authService.setAuthStatus(true);
+      this.router.navigate(['/home']);
+    } else {
+      this.errorMessage = 'Credenciales incorrectas';
     }
   }
 }
