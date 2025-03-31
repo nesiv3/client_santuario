@@ -9,10 +9,7 @@
     </button>
   </div>
 
-  <span
-    *ngIf="loading"
-    class="spinner-border text-primary spinner-border-sm"
-  ></span>
+  <span *ngIf="loading" class="spinner-border text-primary spinner-border-sm"></span>
 
   <!-- Barra de búsqueda y botones -->
   <div class="d-flex justify-content-between mb-3">
@@ -20,12 +17,7 @@
       Descargar Excel
     </button>
     <div class="input-group w-50">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Buscar producto"
-        [(ngModel)]="searchTerm"
-      />
+      <input type="text" class="form-control" placeholder="Buscar producto" [(ngModel)]="searchTerm" />
       <button class="btn btn-outline-secondary" (click)="searchProduct()">
         Buscar
       </button>
@@ -67,19 +59,12 @@
 
   <!-- Botones de Paginación -->
   <div class="text-center mt-3">
-    <button
-      class="btn btn-outline-secondary me-2"
-      (click)="prevPage()"
-      [disabled]="currentPage === 1"
-    >
+    <button class="btn btn-outline-secondary me-2" (click)="prevPage()" [disabled]="currentPage === 1">
       Anterior
     </button>
     <span class="fw-bold">Página {{ currentPage }}</span>
-    <button
-      class="btn btn-outline-secondary ms-2"
-      (click)="nextPage()"
-      [disabled]="currentPage * itemsPerPage >= filteredProducts.length"
-    >
+    <button class="btn btn-outline-secondary ms-2" (click)="nextPage()"
+      [disabled]="currentPage * itemsPerPage >= filteredProducts.length">
       Siguiente
     </button>
   </div>
@@ -95,16 +80,8 @@
       </div>
       <div class="modal-body">
         <div class="mb-3">
-          <label for="productCode" class="form-label"
-            >Código del Producto:</label
-          >
-          <input
-            id="productCode"
-            type="text"
-            class="form-control"
-            [(ngModel)]="productCode"
-            (input)="checkProduct()"
-          />
+          <label for="productCode" class="form-label">Código del Producto:</label>
+          <input id="productCode" type="text" class="form-control" [(ngModel)]="productCode" (input)="checkProduct()" />
         </div>
 
         <div *ngIf="existingProduct">
@@ -113,76 +90,34 @@
         </div>
 
         <div *ngIf="!existingProduct" class="mb-3">
-          <label for="productName" class="form-label"
-            >Nombre del Producto:</label
-          >
-          <input
-            id="productName"
-            type="text"
-            class="form-control"
-            [(ngModel)]="productName"
-          />
+          <label for="productName" class="form-label">Nombre del Producto:</label>
+          <input id="productName" type="text" class="form-control" [(ngModel)]="productName" />
 
           <label for="description" class="form-label">Descripción:</label>
-          <input
-            id="description"
-            type="text"
-            class="form-control"
-            [(ngModel)]="description"
-          />
+          <input id="description" type="text" class="form-control" [(ngModel)]="description" />
 
           <label for="brand" class="form-label">Marca:</label>
-          <input
-            id="brand"
-            type="text"
-            class="form-control"
-            [(ngModel)]="brand"
-          />
+          <input id="brand" type="text" class="form-control" [(ngModel)]="brand" />
 
           <label for="buyPrice" class="form-label">Precio de Compra:</label>
-          <input
-            id="buyPrice"
-            type="number"
-            class="form-control"
-            [(ngModel)]="buy_price"
-          />
+          <input id="buyPrice" type="number" class="form-control" [(ngModel)]="buy_price" />
 
           <label for="codeEarn" class="form-label">Ganancia (%):</label>
-          <input
-            id="codeEarn"
-            type="number"
-            class="form-control"
-            [(ngModel)]="code_earn"
-          />
+          <input id="codeEarn" type="number" class="form-control" [(ngModel)]="code_earn" />
 
           <label for="taxes_code" class="form-label">Impuesto:</label>
-          <input
-            id="taxes_code"
-            type="text"
-            class="form-control"
-            [(ngModel)]="taxes_code"
-          />
+          <input id="taxes_code" type="text" class="form-control" [(ngModel)]="taxes_code" />
         </div>
 
         <div class="mb-3">
           <label for="quantity" class="form-label">Cantidad:</label>
-          <input
-            id="quantity"
-            type="number"
-            class="form-control"
-            [(ngModel)]="quantity"
-            min="1"
-          />
+          <input id="quantity" type="number" class="form-control" [(ngModel)]="quantity" min="1" />
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          class="btn btn-success"
-          (click)="saveProduct()"
-          [disabled]="
+        <button class="btn btn-success" (click)="saveProduct()" [disabled]="
             !productCode || !quantity || (existingProduct && unit_price <= 0)
-          "
-        >
+          ">
           Guardar
         </button>
         <button class="btn btn-secondary" (click)="closeModal()">Cerrar</button>

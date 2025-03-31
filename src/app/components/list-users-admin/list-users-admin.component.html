@@ -2,7 +2,7 @@
   class="container-fluid d-flex justify-content-center align-items-center mt-5"
 >
   <div class="col">
-    <button class="btn btn-secondary my-1 float-end">Registrar usuario</button>
+    <button class="btn btn-secondary my-1 float-end" (click)="openModal2()">Registrar usuario</button>
     <table class="table">
       <thead class="thead-dark">
         <tr>
@@ -33,5 +33,39 @@
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<div *ngIf="showModal2" class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Registrar usuario</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="username" class="form-label">Usuario:</label>
+          <input id="username" type="text" class="form-control" [(ngModel)]="username" />
+
+          <label for="password" class="form-label">Contraseña</label>
+          <input id="password" type="text" class="form-control" [(ngModel)]="password">
+
+          <label for="email" class="form-label">Email</label>
+          <input id="email" type="text" class="form-control" [(ngModel)]="email">
+
+          <label for="type_user" class="form-label">Cargo</label>
+          <input id="type_user" type="text" class="form-control" [(ngModel)]="type_user">
+          
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" (click)="saveUser()">
+            Guardar
+          </button>
+          <button class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+
+        </div>
+      </div>
+    </div>
   </div>
 </div>
