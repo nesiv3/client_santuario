@@ -14,7 +14,7 @@ import { User } from '../../models/user';
 })
 
 export class LoginComponent implements OnInit {
-  username: string = '';
+  email: string = '';
   password: string = '';
   errorMessage: string = '';
   listUsers: User[] = [];
@@ -42,8 +42,11 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(): void {
+    const trimmedEmail = this.email.trim();
+    const trimmedPassword = this.password.trim();
+
     const foundUser = this.listUsers.find(
-      user => user.username === this.username && user.password === this.password
+      user => user.email === trimmedEmail && user.password === trimmedPassword
     );
     
     if (foundUser) {
