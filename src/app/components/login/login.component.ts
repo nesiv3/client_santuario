@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     const trimmedPassword = this.password.trim();
 
     const foundUser = this.listUsers.find(
-      user => user.email === trimmedEmail && user.password === trimmedPassword
+      user => user.email.trim() === trimmedEmail && user.password.trim() === trimmedPassword
     );
     
     if (foundUser) {
