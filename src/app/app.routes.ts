@@ -6,7 +6,6 @@ import { SupplierComponent } from './components/supplier/supplier.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { UsersComponent } from './components/users/users.component';
 import { PurchaseComponent } from './components/purchase/purchase.component';
-
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminComponent } from './components/admin/admin.component';
