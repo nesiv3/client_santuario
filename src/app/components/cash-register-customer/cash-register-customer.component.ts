@@ -71,6 +71,7 @@ export class CashRegisterCustomerComponent implements OnInit {
       this.customerForm.controls['email'].disable();
   
       this.isEditing = true;
+      this.sendCustomer();
     } else {
       alert("Cliente no encontrado. Asegúrese de ingresar correctamente o cree un nuevo cliente.");
       
@@ -121,6 +122,7 @@ export class CashRegisterCustomerComponent implements OnInit {
       },
       complete: () => {
         this.loading = false;  // ✅ Desactivar spinner
+        this.sendCustomer();
       }
     });
   }  
@@ -129,7 +131,9 @@ export class CashRegisterCustomerComponent implements OnInit {
 
   }
   
-
+  sendCustomer() {
+    this.customerSelected.emit(this.selectCustomer ?? undefined);
+  }
   resetCustomerForm() {
     this.customerForm.reset();
     this.selectCustomer = null;

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged, lastValueFrom, switchMap } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +13,7 @@ import { User } from '../../models/user';
 import { CashRegisterSummaryComponent } from '../cash-register-summary/cash-register-summary.component';
 import { CashRegisterCustomerComponent } from '../cash-register-customer/cash-register-customer.component';
 
+;
 @Component({
     selector: 'app-cash-register',
     standalone: true,
@@ -22,6 +23,7 @@ import { CashRegisterCustomerComponent } from '../cash-register-customer/cash-re
 })
 
 export class CashRegisterComponent implements OnInit {
+    
   today: Date = new Date();
   purchaseSummary: Product[] = [];
   barcodeInput = new FormControl('');
