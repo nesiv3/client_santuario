@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
     
     if (foundUser) {
       this.authService.setAuthStatus(true);
+      sessionStorage.setItem('user', JSON.stringify(foundUser))
       this.router.navigate(['/home']);
     } else {
       this.errorMessage = 'Credenciales incorrectas';
