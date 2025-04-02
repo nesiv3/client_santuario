@@ -46,7 +46,7 @@ export class CashRegisterComponent implements OnInit {
         taxes: 0,
         subtotal: 0,
         total_sale: 0,
-        detail_shoppings: [] as DetailShoppings[]
+        detailShoppingBody: [] as DetailShoppings[]
     };
 
     constructor(
@@ -135,13 +135,13 @@ export class CashRegisterComponent implements OnInit {
         
             const product = this.selectedProduct;
         
-            const existingProductIndex = this.shoppingData.detail_shoppings.findIndex(p => p.id_products === product.id_products);
+            const existingProductIndex = this.shoppingData.detailShoppingBody.findIndex(p => p.id_products === product.id_products);
             console.log("Índice encontrado:", existingProductIndex);
         
             if (existingProductIndex !== -1) {
                 // El producto ya está en la lista, actualizar cantidad y total
                 console.log("Producto existente, actualizando...");
-                this.shoppingData.detail_shoppings = this.shoppingData.detail_shoppings.map((item, index) => {
+                this.shoppingData.detailShoppingBody = this.shoppingData.detailShoppingBody.map((item, index) => {
                     if (index === existingProductIndex) {
                         const updatedCount = item.count + 1;
                         const taxRate = item.value_taxes / 100;
@@ -171,7 +171,7 @@ export class CashRegisterComponent implements OnInit {
                     total: 1 * product.buy_price * (1 + earnRate) * (1 + taxRate) // Incluir cantidad (1) desde el inicio
                 };
             
-                this.shoppingData.detail_shoppings = [...this.shoppingData.detail_shoppings, newItem]; // Se reasigna el array
+                this.shoppingData.detailShoppingBody = [...this.shoppingData.detailShoppingBody, newItem]; // Se reasigna el array
             }
         
             this.calculateTotals();
@@ -201,13 +201,13 @@ export class CashRegisterComponent implements OnInit {
 
                 const productId = product.id_products ?? 0;
                 console.log("Escaneado:", productId, product.code);
-                const existingProductIndex = this.shoppingData.detail_shoppings.findIndex(p => p.id_products === productId);
+                const existingProductIndex = this.shoppingData.detailShoppingBody.findIndex(p => p.id_products === productId);
                 console.log("Índice encontrado:", existingProductIndex);
 
                 if (existingProductIndex !== -1) {
                     // El producto ya está en la lista, actualizar cantidad y total
                     console.log("Producto existente, actualizando...");
-                    this.shoppingData.detail_shoppings = this.shoppingData.detail_shoppings.map((item, index) => {
+                    this.shoppingData.detailShoppingBody = this.shoppingData.detailShoppingBody.map((item, index) => {
                         if (index === existingProductIndex) {
                             const updatedCount = item.count + 1;
                             const taxRate = item.value_taxes / 100;
@@ -236,7 +236,7 @@ export class CashRegisterComponent implements OnInit {
                         total: 1 * product.unit_price * (1 + taxRate) // Incluir cantidad (1) desde el inicio
                     };
         
-                    this.shoppingData.detail_shoppings = [...this.shoppingData.detail_shoppings, newItem]; // Se reasigna el array
+                    this.shoppingData.detailShoppingBody = [...this.shoppingData.detailShoppingBody, newItem]; // Se reasigna el array
                 }
         
                 this.calculateTotals();
@@ -248,14 +248,14 @@ export class CashRegisterComponent implements OnInit {
 
     // 🔹 Agregado: Eliminar productos del carrito
     removeProduct(productId: number) {
-        const index = this.shoppingData.detail_shoppings.findIndex(p => p.id_products === productId);
+        const index = this.shoppingData.detailShoppingBody.findIndex(p => p.id_products === productId);
 
         if (index !== -1) {
-            if (this.shoppingData.detail_shoppings[index].count > 1) {
-                this.shoppingData.detail_shoppings[index].count -= 1;
-                this.shoppingData.detail_shoppings[index].total = this.shoppingData.detail_shoppings[index].count * this.shoppingData.detail_shoppings[index].unit_price;
+            if (this.shoppingData.detailShoppingBody[index].count > 1) {
+                this.shoppingData.detailShoppingBody[index].count -= 1;
+                this.shoppingData.detailShoppingBody[index].total = this.shoppingData.detailShoppingBody[index].count * this.shoppingData.detailShoppingBody[index].unit_price;
             } else {
-                this.shoppingData.detail_shoppings.splice(index, 1);
+                this.shoppingData.detailShoppingBody.splice(index, 1);
             }
 
             this.calculateTotals();
@@ -265,11 +265,11 @@ export class CashRegisterComponent implements OnInit {
     // 🔹 Manteniendo la nueva forma de calcular totales
     calculateTotals() {
         console.log("Calculando totales...");
-        console.log(this.shoppingData.detail_shoppings);
-        this.shoppingData.subtotal = this.shoppingData.detail_shoppings.reduce(
+        console.log(this.shoppingData.detailShoppingBody);
+        this.shoppingData.subtotal = this.shoppingData.detailShoppingBody.reduce(
             (acc, item) => acc + (item.unit_price * item.count), 0
         );
-        this.shoppingData.taxes = this.shoppingData.detail_shoppings.reduce((acc, item) => acc + (((item.count * item.unit_price)* item.value_taxes)/ 100), 0);
+        this.shoppingData.taxes = this.shoppingData.detailShoppingBody.reduce((acc, item) => acc + (((item.count * item.unit_price)* item.value_taxes)/ 100), 0);
         this.shoppingData.total_sale = this.shoppingData.subtotal + this.shoppingData.taxes; // El backend sumará los impuestos
 
         console.log("Subtotal:", this.shoppingData.subtotal);
@@ -292,7 +292,7 @@ export class CashRegisterComponent implements OnInit {
     }
 
     async confirmShopping() {
-        if (this.shoppingData.detail_shoppings.length === 0) {
+        if (this.shoppingData.detailShoppingBody.length === 0) {
             alert("Debe agregar al menos un producto al carrito");
             return;
         }
@@ -306,14 +306,14 @@ export class CashRegisterComponent implements OnInit {
                 return;
                 }
                 else{
-                    this.shoppingData.customer = this.selectedCustomer.id_customers ?? 0; // Asignar el ID del cliente seleccionado o un valor predeterminado
+   this.shoppingData.customer = this.selectedCustomer.id_customers ?? 0; // Asignar el ID del cliente seleccionado o un valor predeterminado
                 }
      
             // 🔹 Eliminar `name` de los productos antes de enviarlos al backend
-            const detail_shopping_sanitized = this.shoppingData.detail_shoppings.map(({ name, ...item }) => item);
+            const detail_shopping_sanitized = this.shoppingData.detailShoppingBody.map(({ name, ...item }) => item);
             const dataToSend: Shopping = {
                 ...this.shoppingData,
-                detail_shoppings: detail_shopping_sanitized
+                detailShoppingBody: detail_shopping_sanitized
             };
 
             console.log("Datos que se enviarán al backend:", JSON.stringify(dataToSend, null, 2));
@@ -345,7 +345,7 @@ export class CashRegisterComponent implements OnInit {
             taxes: 0,
             subtotal: 0,
             total_sale: 0,
-            detail_shoppings: []
+            detailShoppingBody: []
         };
     }
 
@@ -366,7 +366,7 @@ export class CashRegisterComponent implements OnInit {
                 </tr>
         `;
 
-        this.shoppingData.detail_shoppings.forEach(item => {
+        this.shoppingData.detailShoppingBody.forEach(item => {
             summaryContent += `
                 <tr>
                     <td>${item.id_products}</td>
