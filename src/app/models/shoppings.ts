@@ -9,5 +9,5 @@ export interface Shopping {
   taxes: number;
   subtotal: number;
   total_sale: number;
-  detail_shoppings: DetailShoppings[];
+  detailShoppingBody: DetailShoppings[];
   }
