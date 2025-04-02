@@ -300,7 +300,15 @@ export class CashRegisterComponent implements OnInit {
         try {
             this.shoppingData.userId = await this.userId();
             this.calculateTotals();
-
+            if(this.selectedCustomer.id_customers == undefined || this.selectedCustomer.id_customers == null)
+                {
+                alert("Debe seleccionar un cliente antes de continuar.");
+                return;
+                }
+                else{
+                    this.shoppingData.customer = this.selectedCustomer.id_customers ?? 0; // Asignar el ID del cliente seleccionado o un valor predeterminado
+                }
+     
             // 🔹 Eliminar `name` de los productos antes de enviarlos al backend
             const detail_shopping_sanitized = this.shoppingData.detail_shoppings.map(({ name, ...item }) => item);
             const dataToSend: Shopping = {
