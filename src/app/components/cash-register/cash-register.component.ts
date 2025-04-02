@@ -33,6 +33,7 @@ export class CashRegisterComponent implements OnInit {
   cashReceived: number = 0;
   change: number = 0;
   selectedCustomer!: Customer;
+  paymentOption: string = '';
   modalVisible: boolean = false;
 
   shoppingData = {
@@ -279,6 +280,15 @@ export class CashRegisterComponent implements OnInit {
         this.modalVisible = true;
     }
 
+    paymentMethod(){
+        if (this.paymentOption) {
+        this.shoppingData.payment_method = this.paymentOption;
+        console.log('Método de pago actualizado:', this.shoppingData.payment_method);
+        } else {
+        console.log('Por favor, seleccione un método de pago válido.');
+        }
+    }
+
     async confirmShopping() {
         if (this.shoppingData.detail_shoppings.length === 0) {
             alert("Debe agregar al menos un producto al carrito");
@@ -313,7 +323,6 @@ export class CashRegisterComponent implements OnInit {
         } catch (error) {
             console.error("Error obteniendo el userId:", error);
         }
-
     }
     
 
