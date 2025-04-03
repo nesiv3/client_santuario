@@ -27,8 +27,9 @@
                 class="form-check-input"
                 type="checkbox"
                 role="switch"
-                id="active"
-                checked
+                id="active-{{ user.id_user }}"
+                [checked]="user.active"
+                (change)="toggleUser(user)"
               />
             </div>
           </td>
