@@ -107,6 +107,24 @@ saveUser() {
   });
 }
 
+toggleUser(user:any){
+  const previousState = user.active; // Guardar estado previo por si hay error
+  user.active = !user.active; // Cambiar estado visualmente
+
+  this.usersServices.toggleUserActive(user.id_user).subscribe({
+    next: (response) => {
+      console.log("Estado actualizado correctamente:", response);
+      alert(response.message);
+    },
+    error: (error) => {
+      console.error("Error al actualizar estado:", error);
+      alert("Hubo un error al cambiar el estado del usuario.");
+      user.active = previousState; // Revertir cambio si falla
+    }
+  });
+
+}
+
 chargeUsers(){
    this.usersServices.getAllUsers().subscribe({
       next: (users) => {  

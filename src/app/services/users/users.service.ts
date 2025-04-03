@@ -51,8 +51,8 @@ export class UsersService {
     );
   }
 
-  toggleUserActive(user_id: number): Observable<{ message: string }> {
-    return this.http.put<{ message: string }>(`${this.ALL_USERS_URL}/${user_id}/toggle-active`, {}).pipe(
+  toggleUserActive(id_user: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.ALL_USERS_URL}/delete/${id_user}`, {}).pipe(
       map(response => response),
       catchError(this.handleError)
     );
