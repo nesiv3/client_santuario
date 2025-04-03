@@ -2,8 +2,8 @@
   class="container-fluid d-flex justify-content-center align-items-center mt-5"
 >
   <div class="col">
-    <button class="btn btn-secondary my-1 float-end">
-      Registrar Tipo de usuario
+    <button class="btn btn-secondary my-1 float-end" (click)="openModal4()">
+      Crear Tipo de usuario
     </button>
     <table class="table">
       <thead class="thead-dark">
@@ -31,5 +31,45 @@
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+<!-- MODAL -->
+<div
+  *ngIf="showModal4"
+  class="modal"
+  [ngClass]="{ 'fade show d-block': showModal4 }"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear tipo usuario</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="rol" class="form-label">Rol:</label>
+          <input
+            id="rol"
+            type="text"
+            class="form-control"
+            [(ngModel)]="typeForm.rol"
+          />
+
+          <label for="active" class="form-label">Activación</label>
+          <input
+            id="active"
+            type="text"
+            class="form-control"
+            [(ngModel)]="typeForm.active"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="saveUserType()">
+          Guardar
+        </button>
+        <button class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>

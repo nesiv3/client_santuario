@@ -3,26 +3,27 @@
     <a class="navbar-brand fw-bold mx-4" routerLink="/">El Santuario 2001</a>
     <ul class="list-unstyled m-0 d-flex align-items-center m-0">
       <li class="nav-item" *ngIf="authService.isLoggedIn()">
-        <a class="navbar-brand fw-bold mx-4">{{userItem.username}}</a>
+        <a class="navbar-brand fw-bold mx-4">{{ userItem.username }}</a>
       </li>
       <li class="nav-item" *ngIf="authService.isLoggedIn()">
-      <a class="nav-link fw-bold" href="#"  (click)="logout()">Cerrar sesión</a>
-    </li>
+        <a class="nav-link fw-bold" href="#" (click)="logout()"
+          >Cerrar sesión</a
+        >
+      </li>
     </ul>
-
-    
-    
   </div>
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid d-flex flex-column">
-     
-
-      <div class="collapse navbar-collapse d-flex justify-content-around" id="navbarNav">
+      <div
+        class="collapse navbar-collapse d-flex justify-content-around"
+        id="navbarNav"
+      >
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item mx-5 fw-bold">
             <a class="btn nav-link" routerLink="/home" routerLinkActive="active"
-              >Inicio</a>
+              >Inicio</a
+            >
           </li>
           <li class="nav-item mx-5 fw-bold">
             <a class="btn nav-link" routerLink="/cash" routerLinkActive="active"
@@ -31,18 +32,30 @@
           </li>
 
           <li class="nav-item dropdown fw-bold">
-            <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="inventoryDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               Inventario
             </a>
             <ul class="dropdown-menu" aria-labelledby="inventoryDropdown">
-              <li><a class="dropdown-item" routerLink="/inventory">Gestión de Inventario</a></li>
-              <li><a class="dropdown-item" routerLink="/purchase">Ingreso de Facturas</a></li>
+              <li>
+                <a class="dropdown-item" routerLink="/inventory"
+                  >Gestión de Inventario</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/purchase"
+                  >Ingreso de Facturas</a
+                >
+              </li>
             </ul>
           </li>
 
-
-          
           <li class="nav-item mx-5 fw-bold">
             <a
               class="btn nav-link"
@@ -59,7 +72,10 @@
               >Perfil</a
             >
           </li>
-          <li class="nav-item mx-5 fw-bold">
+          <li
+            class="nav-item mx-5 fw-bold"
+            *ngIf="userItem?.type_user === 1 || userItem?.type_user === 5"
+          >
             <a
               class="btn nav-link"
               routerLink="/admin"
@@ -72,4 +88,3 @@
     </div>
   </nav>
 </div>
-

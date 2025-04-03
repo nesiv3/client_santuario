@@ -3,7 +3,9 @@
   <h2 class="text-center text-secondary">Caja Registradora</h2>
   <div class="container-xl d-flex justify-content-around">
     <div class="input-group mb-3 w-100">
-      <button class="btn btn-info mx-3" (click)="userId()">user</button>
+      <button class="btn btn-info mx-3" (click)="userId()">
+        Usuario: {{ userItem.type_user }}
+      </button>
       <!-- Input para escanear código de barras -->
       <input
         type="text"

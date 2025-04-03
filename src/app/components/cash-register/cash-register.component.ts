@@ -37,6 +37,7 @@ export class CashRegisterComponent implements OnInit {
   selectedCustomer!: Customer;
   paymentOption: string = '';
   modalVisible: boolean = false;
+  userItem: User | any = null
 
   shoppingData = {
         date: new Date(),
@@ -57,19 +58,18 @@ export class CashRegisterComponent implements OnInit {
 
     ngOnInit(): void {
         this.searchProduct();
-        this.userId();
+        this.userItem = JSON.parse(sessionStorage.getItem('user') || '{}');
     }
 
     // autentificación de cajero
-    async userId(): Promise<number> {
+    async userId(): Promise<void> {
         try {
-            const user = await lastValueFrom(this.usersService.getUserById(2));
-            console.log("Usuario obtenido:", user);
+            console.log("Usuario obtenido:", this.userItem);
 
-            if (user.id_user === undefined) {
+            if (this.userItem.id_user === undefined) {
                 throw new Error("Usuario no encontrado o sin ID válido");
             }
-            return user.id_user;
+            this.shoppingData.userId = this.userItem.id_user
         } catch (error) {
             if (error instanceof Error) {
                 alert(error.message);
@@ -82,7 +82,6 @@ export class CashRegisterComponent implements OnInit {
 
     setCustomerData(customer: Customer) {
     this.selectedCustomer = customer;  // 🔴 Guardar los datos del cliente
-    
     console.log('Cliente recibido en el padre:', this.selectedCustomer);
     }
 
@@ -298,7 +297,7 @@ export class CashRegisterComponent implements OnInit {
         }
     
         try {
-            this.shoppingData.userId = await this.userId();
+            await this.userId();
             this.calculateTotals();
             if(this.selectedCustomer.id_customers == undefined || this.selectedCustomer.id_customers == null)
                 {
@@ -328,7 +327,7 @@ export class CashRegisterComponent implements OnInit {
                     alert(error.message);
                 }
             });
-    
+
             this.modalVisible = false;
         } catch (error) {
             console.error("Error obteniendo el userId:", error);

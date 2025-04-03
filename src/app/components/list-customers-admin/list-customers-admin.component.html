@@ -2,7 +2,7 @@
   class="container-fluid d-flex justify-content-center align-items-center mt-5"
 >
   <div class="col">
-    <button class="btn btn-secondary my-1 float-end">Registrar usuario</button>
+    <!-- <button class="btn btn-secondary my-1 float-end">Registrar usuario</button> -->
     <table class="table">
       <thead class="thead-dark">
         <tr>
@@ -16,6 +16,7 @@
       <tbody>
         <tr *ngFor="let customer of listcustomers">
           <td>{{ customer.id_customers }}</td>
+          <td>{{ customer.name }}</td>
           <td>{{ customer.document }}</td>
           <td>{{ customer.email }}</td>
           <td>{{ customer.phone }}</td>

@@ -13,7 +13,6 @@
               class="form-control"
               formControlName="document"
               (keyup.enter)="selectingCustomer()"
-              
               [disabled]="isEditing"
               required
             />
@@ -48,20 +47,31 @@
             />
           </div>
         </div>
-        <button type="submit" class="btn btn-success mt-3" (click)='cashCustomer()'>
+        <button
+          type="submit"
+          class="btn btn-success mt-3"
+          (click)="cashCustomer()"
+        >
           {{ isEditing ? "Cargar" : "Buscar" }}
         </button>
-        <button type="button" class="btn btn-secondary mt-3 ms-2" (click)="resetCustomerForm()">
+        <button
+          type="button"
+          class="btn btn-secondary mt-3 ms-2"
+          (click)="resetCustomerForm()"
+        >
           Cancelar
         </button>
         <div *ngIf="loading" class="spinner-container float-end mt-3">
           <div class="spinner"></div>
         </div>
-        <button class="btn btn-info float-end mt-3"
-        *ngIf="!isEditing"
-        (click)="saveCustomer()" 
-        [disabled]="customerForm.invalid || loading"
-        >Registrar</button>
+        <button
+          class="btn btn-info float-end mt-3"
+          *ngIf="!isEditing"
+          (click)="saveCustomer()"
+          [disabled]="customerForm.invalid || loading"
+        >
+          Registrar
+        </button>
       </form>
     </div>
   </div>
