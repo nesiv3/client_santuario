@@ -57,4 +57,21 @@ export class ListTypesAdminComponent implements OnInit {
     this.closeModal();
   }
 
+  toggleTypeUser(type: any) {
+    const previousState = type.active; // Guardar estado previo por si hay error
+    type.active = !type.active; // Cambiar estado visualmente
+    
+    this.serviceTypeUsers.toggleActiveStatus(type.id_userType).subscribe({
+      next: (response) => {
+        console.log("Estado actualizado correctamente:", response);
+        alert(response.message);
+      },
+      error: (error) => {
+        console.error("Error al actualizar estado:", error);
+        alert("Hubo un error al cambiar el estado del usuario.");
+        type.active = previousState; // Revertir cambio si falla
+      }
+    });
+  }
+
 }

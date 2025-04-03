@@ -291,48 +291,49 @@ export class CashRegisterComponent implements OnInit {
     }
 
     async confirmShopping() {
-        if (this.shoppingData.detailShoppingBody.length === 0) {
-            alert("Debe agregar al menos un producto al carrito");
+    if (this.shoppingData.detailShoppingBody.length === 0) {
+        alert("Debe agregar al menos un producto al carrito");
+        return;
+    }
+
+    try {
+        await this.userId(); // Si falla, ya muestra su error interno
+        this.calculateTotals();
+
+        if (!this.selectedCustomer?.id_customers) {
+            alert("Debe seleccionar un cliente antes de continuar.");
             return;
         }
-    
-        try {
-            await this.userId();
-            this.calculateTotals();
-            if(this.selectedCustomer.id_customers == undefined || this.selectedCustomer.id_customers == null)
-                {
-                alert("Debe seleccionar un cliente antes de continuar.");
-                return;
-                }
-                else{
-   this.shoppingData.customer = this.selectedCustomer.id_customers ?? 0; // Asignar el ID del cliente seleccionado o un valor predeterminado
-                }
-     
-            // 🔹 Eliminar `name` de los productos antes de enviarlos al backend
-            const detail_shopping_sanitized = this.shoppingData.detailShoppingBody.map(({ name, ...item }) => item);
-            const dataToSend: Shopping = {
-                ...this.shoppingData,
-                detailShoppingBody: detail_shopping_sanitized
-            };
 
-            console.log("Datos que se enviarán al backend:", JSON.stringify(dataToSend, null, 2));
-    
-            this.shoppingService.createShopping(dataToSend).subscribe({
-                next: (response) => {
-                    console.log("Respuesta del backend:", response);
-                    alert(response.message);
-                    this.resetShopping();
-                },
-                error: (error) => {
-                    alert(error.message);
-                }
-            });
+        this.shoppingData.customer = this.selectedCustomer.id_customers; 
 
-            this.modalVisible = false;
-        } catch (error) {
-            console.error("Error obteniendo el userId:", error);
-        }
+        // 🔹 Eliminar `name` de los productos antes de enviarlos al backend
+        const detail_shopping_sanitized = this.shoppingData.detailShoppingBody.map(({ name, ...item }) => item);
+        const dataToSend: Shopping = {
+            ...this.shoppingData,
+            detailShoppingBody: detail_shopping_sanitized
+        };
+
+        console.log("Datos que se enviarán al backend:", JSON.stringify(dataToSend, null, 2));
+
+        this.shoppingService.createShopping(dataToSend).subscribe({
+            next: (response) => {
+                console.log("Respuesta del backend:", response);
+                alert(response.message);
+                this.resetShopping();
+            },
+            error: (error) => {
+                console.error("Error en la petición:", error);
+                alert(error.message || "Ocurrió un error al procesar la compra.");
+            }
+        });
+
+        this.modalVisible = false;
+    } catch (error) {
+        console.error("Error al confirmar la compra:", error);
+        alert(error instanceof Error ? error.message : "Error inesperado al confirmar la compra.");
     }
+}
     
 
     resetShopping() {
