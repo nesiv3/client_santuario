@@ -23,8 +23,9 @@
                 class="form-check-input"
                 type="checkbox"
                 role="switch"
-                id="active"
-                checked
+                id="active-{{ type.id_userType }}"
+                [checked]="type.active"
+                (change)="toggleTypeUser(type)"
               />
             </div>
           </td>
