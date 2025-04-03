@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @Component({
     selector: 'nav-bar',
     standalone: true,
-    imports: [ RouterLink,ReactiveFormsModule, FormsModule, CommonModule],
+    imports: [ RouterLink, ReactiveFormsModule, FormsModule, CommonModule],
     templateUrl: './nav-bar.component.html',
     styleUrls: ['./nav-bar.component.css']
 })
