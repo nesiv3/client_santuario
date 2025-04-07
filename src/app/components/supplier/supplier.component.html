@@ -67,7 +67,6 @@
   <table class="table table-bordered table-striped">
     <thead class="table-dark">
       <tr>
-        <th>ID</th>
         <th>NIT</th>
         <th>Nombre</th>
         <th>Dirección</th>
@@ -80,7 +79,6 @@
     </thead>
     <tbody>
       <tr *ngFor="let supplier of paginatedSuppliers">
-        <td>{{ supplier.id_suppliers }}</td>
         <td>{{ supplier.nit }}</td>
         <td>{{ supplier.name }}</td>
         <td>{{ supplier.address }}</td>
@@ -91,6 +89,7 @@
           <div class="form-check form-switch" >
             <input  class="form-check-input " 
             type="checkbox" role="switch" 
+            id="active-{{supplier.id_suppliers}}"
             [checked]="supplier.active"
             (change)="toggleSupplierStatus(supplier)"
             >

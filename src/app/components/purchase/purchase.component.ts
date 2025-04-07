@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-purchase',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule], 
+  imports: [ReactiveFormsModule, FormsModule, CommonModule],
   templateUrl: './purchase.component.html',
   styleUrls: ['./purchase.component.css']
 })
@@ -65,22 +65,22 @@ export class PurchaseComponent implements OnInit {
           // this.calculateTotal(newProduct);
           this.selectedProducts.push(newProduct);
         }
-        } else {
-          alert ('Producto no encontrado')
-        }
-      }, error => {
-        console.error('Error obteniendo producto',error)
-      
+      } else {
+        alert('Producto no encontrado')
+      }
+    }, error => {
+      console.error('Error obteniendo producto', error)
+
     });
-    this.purchaseForm.patchValue({barcode:''});
+    this.purchaseForm.patchValue({ barcode: '' });
 
   }
 
   calculateTotal(product: any): void {
     product.total = (product.unit_price + (product.unit_price * product.value_taxes) / 100) * product.count;
-    
+
   }
-  
+
 
   removeProduct(index: number): void {
     this.selectedProducts.splice(index, 1);
@@ -107,16 +107,24 @@ export class PurchaseComponent implements OnInit {
         count: product.count,
         unit_price: parseFloat(product.unit_price),
         value_taxes: product.taxes_code,
-        total: (parseFloat(product.unit_price) + (parseFloat(product.unit_price) * product.taxes_code / 100)) * product.count 
+        total: (parseFloat(product.unit_price) + (parseFloat(product.unit_price) * product.taxes_code / 100)) * product.count
       }))
     };
 
     console.log('Compra a enviar:', purchaseData);
 
-    this.purchasesService.createPurchase(purchaseData).subscribe(() => {
-      
-      this.selectedProducts = [];
-      this.purchaseForm.reset();
+    this.purchasesService.createPurchase(purchaseData).subscribe({
+      next: (response) => {
+        console.log("Respuesta del backend:", response);
+        alert(response.message);
+        this.selectedProducts = [];
+        this.purchaseForm.reset();
+
+      },
+      error: (error) => {
+        console.error("Error en la petición:", error);
+        alert(error.message || "Ocurrió un error al procesar la compra.");
+      }
     });
   }
 }
