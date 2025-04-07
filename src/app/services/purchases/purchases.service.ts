@@ -29,8 +29,8 @@ export class PurchasesService {
   }
 
   /** Crea una nueva compra */
-  createPurchase(data: Purchase): Observable<Purchase> {
-    return this.http.post<Purchase>(this.PURCHASES_URL, data).pipe(
+  createPurchase(data: Purchase): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(this.PURCHASES_URL, data).pipe(
       catchError(error => this.handleError('Error al crear una compra', error))
     );
   }

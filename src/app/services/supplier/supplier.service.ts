@@ -51,8 +51,8 @@ export class SupplierService {
   }
 
   /** 🔴 Desactiva un proveedor (NO lo elimina, solo lo desactiva en el sistema) */
-  deleteSupplier(id_suppliers: number): Observable<Supplier> {
-    return this.http.delete<Supplier>(`${this.SUPPLIER_URL}/${id_suppliers}`)
+  deleteSupplier(id_suppliers: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.SUPPLIER_URL}/delete/${id_suppliers}`)
       .pipe(catchError(this.handleError));
   }
 

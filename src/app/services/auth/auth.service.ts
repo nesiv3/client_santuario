@@ -12,12 +12,13 @@ import { TypeUserService } from '../typeUser/type-user.service';
 export class AuthService {
   private isAuth = false;
   private USERS_URL = environment.USERS_URL; 
+  private isBrowser: boolean;
 
   constructor(
     private http: HttpClient, 
     private router: Router,
     private serviceTypeUsers: TypeUserService
-  ) {}
+  ) {this.isBrowser = typeof window !== 'undefined' && typeof sessionStorage !== 'undefined'}
 
   // Guarda el estado de autenticación
   setAuthStatus(status: boolean): void {

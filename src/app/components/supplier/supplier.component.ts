@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SupplierService } from '../../services/supplier/supplier.service';
 import { Supplier } from '../../models/supplier';
+import { response } from 'express';
+import { error } from 'console';
 
 
 @Component({
@@ -92,10 +94,23 @@ export class SupplierComponent {
     this.isEditing = false;
   }
 
-  toggleSupplierStatus(supplier: Supplier) {
-    this.supplierService.deleteSupplier(supplier.id_suppliers!).subscribe(() => {
-      supplier.active = !supplier.active; // Cambia visualmente el estado en la interfaz
+  toggleSupplierStatus(supplier: any) {
+    const previousState = supplier.active;
+    supplier.active = !supplier.active;
+
+    this.supplierService.deleteSupplier(supplier.id_suppliers).subscribe({
+      next:(response)=>{
+        console.log("Estado actualizado correctamente",response);
+        alert(response.message);
+      },
+      error:(error)=>{
+        console.error("Error Actualizar estado:",error);
+        supplier.active=previousState;
+      }
     });
+    // this.supplierService.deleteSupplier(supplier.id_suppliers!).subscribe(() => {
+    //   supplier.active = !supplier.active; // Cambia visualmente el estado en la interfaz
+    // });
   }
   
 
