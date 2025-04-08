@@ -18,8 +18,8 @@ export class LoginComponent implements OnInit {
   password: string = '';
   errorMessage: string = '';
   successMessage: string = '';
-  listUsers: User[] = [];
   isLoading: boolean = false;
+  listUsers: User[] = [];
 
   constructor(
     private authService: AuthService,
@@ -42,29 +42,31 @@ export class LoginComponent implements OnInit {
       }
     });
   }
-
   onLogin(): void {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-    
+  
     const trimmedEmail = this.email.trim();
     const trimmedPassword = this.password.trim();
-
+  
     const foundUser = this.listUsers.find(
-      user => user.email.trim() === trimmedEmail && user.password.trim() === trimmedPassword
+      user =>
+        user.email.trim().toLowerCase() === trimmedEmail.toLowerCase() &&
+        user.password.trim() === trimmedPassword
     );
-    
+  
     if (foundUser) {
       this.authService.setAuthStatus(true);
       sessionStorage.setItem('user', JSON.stringify(foundUser));
+      sessionStorage.setItem('welcome', `¡Bienvenido ${foundUser.email}!`);
       this.successMessage = `¡Bienvenido ${foundUser.email}!`;
-      
+  
       setTimeout(() => {
         this.router.navigate(['/home']).then(() => {
           this.isLoading = false;
         });
-      }, 1500);
+      });
     } else {
       this.errorMessage = 'Credenciales incorrectas';
       this.isLoading = false;
