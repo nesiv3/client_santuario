@@ -13,6 +13,7 @@
           <th scope="col">Correo</th>
           <th scope="col">Tipo de usuario</th>
           <th scope="col">Activado/Desactivado</th>
+          <th scope="col">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -33,6 +34,9 @@
               />
             </div>
           </td>
+          <td>
+            <button class="btn btn-warning btn-sm d-block mb-2" (click)="startEditUser(user)">Editar</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -48,32 +52,32 @@
       </div>
       <div class="modal-body">
         <div class="mb-3">
-          <label for="username" class="form-label">Usuario:</label>
+          <label for="username-create" class="form-label">Usuario:</label>
           <input
-            id="username"
+            id="username-create"
             type="text"
             class="form-control"
             [(ngModel)]="username"
           />
 
-          <label for="password" class="form-label">Contraseña</label>
+          <label for="password-create" class="form-label">Contraseña</label>
           <input
-            id="password"
+            id="password-create"
             type="text"
             class="form-control"
             [(ngModel)]="password"
           />
 
-          <label for="email" class="form-label">Email</label>
+          <label for="email-create" class="form-label">Email</label>
           <input
-            id="email"
+            id="email-create"
             type="text"
             class="form-control"
             [(ngModel)]="email"
           />
 
-          <label for="type_user" class="form-label">Cargo</label>
-          <select id="type_user" class="form-select" [(ngModel)]="type_user">
+          <label for="type_user-create" class="form-label">Cargo</label>
+          <select id="type_user-create" class="form-select" [(ngModel)]="type_user">
             <option
               *ngFor="let type of typesUsersApi"
               [value]="type.id_userType"
@@ -91,4 +95,37 @@
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="showEditForm" class="mt-4 p-3 border rounded bg-light">
+  <h5>Editar Usuario</h5>
+  <form [formGroup]="editForm" (ngSubmit)="submitEditUser()">
+    <div class="mb-2">
+      <label for="edit-username">Usuario</label>
+  <input id="edit-username" class="form-control" formControlName="username" />
+    </div>
+
+    <div class="mb-2">
+      <label for="edit-email">Email</label>
+  <input id="edit-email" class="form-control" type="email" formControlName="email" />
+    </div>
+
+    <div class="mb-2">
+      <label for="edit-type_user">Tipo de Usuario</label>
+      <select id="edit-type_user" class="form-control" formControlName="type_user">
+        <option [value]="0">Administrador</option>
+        <option [value]="1">Supervisor</option>
+        <option [value]="2">Cajero</option>
+        <option [value]="3">Ayudante</option>
+      </select>
+    </div>
+
+    <div class="form-check mb-2">
+      <input id="edit-active" class="form-check-input" type="checkbox" formControlName="active" />
+      <label class="form-check-label" for="edit-active">Activo</label>
+    </div>
+
+    <button class="btn btn-success me-2" type="submit" [disabled]="editForm.invalid">Guardar Cambios</button>
+    <button class="btn btn-secondary" type="button" (click)="showEditForm = false">Cancelar</button>
+  </form>
 </div>
