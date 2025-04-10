@@ -2,14 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users/users.service';
 import { User } from '../../models/user';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TypeUserService } from '../../services/typeUser/type-user.service';
 import { UserType } from '../../models/userType';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'list-users-admin',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule ],
   templateUrl: './list-users-admin.component.html',
   styleUrl: './list-users-admin.component.css'
 })
@@ -22,13 +24,25 @@ username:string = '';
 password:string='';
 email:string='';
 type_user:number= 0;
+id_user: number =0;
+editForm!: FormGroup;
+selectedUserId: number | null = null;
+showEditForm = false;
+
 
 constructor(
+  private fb: FormBuilder,
   private usersServices : UsersService,
   private serviceTypeUsers: TypeUserService
 ){}
 
 ngOnInit(): void {
+  this.editForm = this.fb.group({
+    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    type_user: [0, Validators.required],
+    active: [false]
+  }),
   this.chargeUsers();
   this.chargeTypeUsers();
   console.log('Lista de usuarios al iniciar:', this.listUsers);
@@ -46,6 +60,41 @@ ngOnInit(): void {
       }
     });
   }
+
+  startEditUser(user: User) {
+    this.selectedUserId = user.id_user ?? null;
+    this.editForm.patchValue({
+      username: user.username,
+      email: user.email,
+      type_user: user.type_user,
+      active: user.active
+    });
+    this.showEditForm = true;
+  }
+
+  submitEditUser() {
+    if (this.editForm.invalid || this.selectedUserId === null) {
+      alert('Formulario inválido o ID de usuario no definido');
+      return;
+    }
+  
+    const updatedData = this.editForm.value;
+  
+    this.usersServices.editUser(this.selectedUserId, updatedData).subscribe({
+      next: (res) => {
+        alert(res.message);
+        this.showEditForm = false;
+        this.selectedUserId = null;
+        // Opcional: volver a cargar la lista de usuarios
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error al editar el usuario');
+      }
+    });
+  }
+  
+  
 
 openModal2(){
   this.showModal2 = true;
