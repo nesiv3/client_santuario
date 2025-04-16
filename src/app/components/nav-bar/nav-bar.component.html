@@ -26,17 +26,26 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-  
+
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav w-100 justify-content-center justify-content-lg-around text-center text-lg-start">
+        <ul
+          class="navbar-nav w-100 justify-content-center justify-content-lg-around text-center text-lg-start"
+        >
           <li class="nav-item mx-2 fw-bold">
-            <a class="btn nav-link" routerLink="/home" routerLinkActive="active">Inicio</a>
+            <a class="btn nav-link" routerLink="/home" routerLinkActive="active"
+              >Inicio</a
+            >
           </li>
           <li class="nav-item mx-2 fw-bold">
-            <a class="btn nav-link" routerLink="/cash" routerLinkActive="active">Caja</a>
+            <a class="btn nav-link" routerLink="/cash" routerLinkActive="active"
+              >Caja</a
+            >
           </li>
-  
-          <li class="nav-item dropdown fw-bold">
+
+          <li
+            class="nav-item dropdown fw-bold"
+            *ngIf="userItem?.type_user === 1 || userItem?.type_user === 2"
+          >
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -49,24 +58,43 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="inventoryDropdown">
               <li>
-                <a class="dropdown-item" routerLink="/inventory">Gestión de Inventario</a>
+                <a class="dropdown-item" routerLink="/inventory"
+                  >Gestión de Inventario</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" routerLink="/purchase">Ingreso de Facturas</a>
+                <a class="dropdown-item" routerLink="/purchase"
+                  >Ingreso de Facturas</a
+                >
               </li>
             </ul>
           </li>
-  
-          <li class="nav-item mx-2 fw-bold">
-            <a class="btn nav-link" routerLink="/supplier" routerLinkActive="active">Proveedores</a>
+
+          <li
+            class="nav-item mx-2 fw-bold"
+            *ngIf="userItem?.type_user === 1 || userItem?.type_user === 2"
+          >
+            <a
+              class="btn nav-link"
+              routerLink="/supplier"
+              routerLinkActive="active"
+              >Proveedores</a
+            >
           </li>
-  
-          <li class="nav-item mx-2 fw-bold" *ngIf="userItem?.type_user === 1 || userItem?.type_user === 5">
-            <a class="btn nav-link" routerLink="/admin" routerLinkActive="active">Administrador</a>
+
+          <li
+            class="nav-item mx-2 fw-bold"
+            *ngIf="userItem?.type_user === 1 || userItem?.type_user === 2"
+          >
+            <a
+              class="btn nav-link"
+              routerLink="/admin"
+              routerLinkActive="active"
+              >Administrador</a
+            >
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  
 </div>

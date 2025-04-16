@@ -125,7 +125,7 @@ saveUser() {
   }
 
   // Validar si el tipo de usuario está activo
-  const selectedTypeUser = this.typesUsersApi.find(type => type.id_userType === this.type_user);
+  const selectedTypeUser = this.typesUsersApi.find(type => type.id_userType == this.type_user);
   if (!selectedTypeUser || !selectedTypeUser.active) {
     alert("El tipo de usuario seleccionado está inactivo. Seleccione uno activo.");
     return;
@@ -142,13 +142,19 @@ saveUser() {
   this.usersServices.createUser(newUser).subscribe({
     next: (response) => {
       alert(response.message); // Muestra el mensaje que devuelve el backend
+      this.chargeUsers();
+      this.closeModal();
     },
     error: (error) => {
       console.error("Error al crear usuario:", error);
 
-      // Verificar si el backend envió un mensaje de error y mostrarlo
-      if (error.error && error.error.message) {
-        alert(`Error: ${error.error.message}`);
+      if (error.error?.message) {
+        // Verifica si el mensaje es el esperado
+        if (error.error.message.includes("Tipo de usuario inactivo")) {
+          alert("El tipo de usuario está inactivo. No puede asignarlo.");
+        } else {
+          alert(`Error: ${error.error.message}`);
+        }
       } else {
         alert("Error desconocido. Consulte la consola para más detalles.");
       }

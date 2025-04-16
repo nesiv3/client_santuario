@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { TypeUserService } from '../../services/typeUser/type-user.service';
 import { UserType } from '../../models/userType';
 import { FormsModule } from '@angular/forms';
+import { error } from 'node:console';
+import { response } from 'express';
 
 @Component({
   selector: 'list-types-admin',
@@ -52,10 +54,24 @@ export class ListTypesAdminComponent implements OnInit {
     this.typeForm = { rol: '', active: true };
   }
 
-  saveUserType() {
-    console.log('Guardando usuario...', this.typeForm);
-    this.closeModal();
+saveUserType() {
+  if (this.typeForm) {
+    this.serviceTypeUsers.createTypeUser(this.typeForm).subscribe({
+      next: (res) => {
+        alert('Tipo de usuario creado con éxito');
+        console.log(res);
+        this.closeModal();
+        this.chargeTypeUsers(); // recargar la lista si lo necesitas
+      },
+      error: (err) => {
+        alert('Error al guardar usuario');
+        console.error(err);
+      }
+    });
+  } else {
+    alert('Formulario inválido o incompleto');
   }
+}
 
   toggleTypeUser(type: any) {
     const previousState = type.active; // Guardar estado previo por si hay error
