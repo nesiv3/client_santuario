@@ -7,38 +7,37 @@
       {{ isEditing ? 'Editar Proveedor' : 'Agregar Proveedor' }}
     </div>
     <div class="card-body">
-      <form (submit)="saveSupplier()">
+      <form [formGroup]="supplierForm" (ngSubmit)="saveSupplier()">
         <div class="row">
           <div class="col-md-4">
             <label class="form-label">NIT:</label>
-            <input type="text" class="form-control" [(ngModel)]="supplierForm.nit" name="nit" [disabled]="isEditing"
-              required>
+            <input type="text" class="form-control" formControlName="nit" required>
           </div>
           <div class="col-md-4">
             <label class="form-label">Nombre:</label>
-            <input type="text" class="form-control" [(ngModel)]="supplierForm.name" name="name" required>
+            <input type="text" class="form-control" formControlName="name" required>
           </div>
           <div class="col-md-4">
             <label class="form-label">Dirección:</label>
-            <input type="text" class="form-control" [(ngModel)]="supplierForm.address" name="address" required>
+            <input type="text" class="form-control" formControlName="address" required>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col-md-4">
             <label class="form-label">Ciudad:</label>
-            <input type="text" class="form-control" [(ngModel)]="supplierForm.city" name="city" required>
+            <input type="text" class="form-control" formControlName="city" required>
           </div>
           <div class="col-md-4">
             <label class="form-label">Teléfono:</label>
-            <input type="number" class="form-control" [(ngModel)]="supplierForm.phone" name="phone" required>
+            <input type="number" class="form-control" formControlName="phone" required>
           </div>
           <div class="col-md-4">
             <label class="form-label">Email:</label>
-            <input type="email" class="form-control" [(ngModel)]="supplierForm.email" name="email" required>
+            <input type="email" class="form-control" formControlName="email" required>
           </div>
         </div>
         <div class="form-check mt-2">
-          <input type="checkbox" class="form-check-input" [(ngModel)]="supplierForm.active" name="active">
+          <input type="checkbox" class="form-check-input" formControlName="active">
           <label class="form-check-label">Activo</label>
         </div>
         <button type="submit" class="btn btn-success mt-3">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
@@ -48,22 +47,17 @@
   </div>
 
   <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-    <!-- Botón Cargar Proveedores -->
     <button class="btn btn-primary" (click)="loadSuppliers()" [disabled]="loading">
       <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
       Cargar Proveedores
     </button>
-  
-    <!-- Barra de Búsqueda -->
+
     <div class="input-group w-auto">
       <input type="text" class="form-control" placeholder="Buscar proveedor" [(ngModel)]="searchTerm" />
       <button class="btn btn-outline-secondary" (click)="searchSupplier()">Buscar</button>
     </div>
   </div>
-  
 
-  
- 
   <table class="table table-bordered table-striped">
     <thead class="table-dark">
       <tr>
@@ -86,14 +80,8 @@
         <td>{{ supplier.phone }}</td>
         <td>{{ supplier.email }}</td>
         <td>
-          <div class="form-check form-switch" >
-            <input  class="form-check-input " 
-            type="checkbox" role="switch" 
-            id="active-{{supplier.id_suppliers}}"
-            [checked]="supplier.active"
-            (change)="toggleSupplierStatus(supplier)"
-            >
-            
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="active-{{supplier.id_suppliers}}" [checked]="supplier.active" (change)="toggleSupplierStatus(supplier)">
           </div>
         </td>
         <td>
@@ -102,13 +90,12 @@
       </tr>
     </tbody>
   </table>
-    <!-- Botones de Paginación -->
-<div class="pagination-controls text-center mt-3">
-  <button class="btn btn-secondary me-2" (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-  <span>Página {{ currentPage }}</span>
-  <button class="btn btn-secondary ms-2" (click)="nextPage()" [disabled]="currentPage * itemsPerPage >= filteredSuppliers.length">Siguiente</button>
+
+  <div class="pagination-controls text-center mt-3">
+    <button class="btn btn-secondary me-2" (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <span>Página {{ currentPage }}</span>
+    <button class="btn btn-secondary ms-2" (click)="nextPage()" [disabled]="currentPage * itemsPerPage >= filteredSuppliers.length">Siguiente</button>
+  </div>
+
+  <p *ngIf="!loading && suppliers.length === 0" class="text-muted">No hay proveedores disponibles.</p>
 </div>
-<p *ngIf="!loading && suppliers.length === 0" class="text-muted">No hay proveedores disponibles.</p>
-</div>
-  
-  

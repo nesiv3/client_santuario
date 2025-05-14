@@ -42,17 +42,15 @@
       <tbody>
         <tr *ngFor="let product of selectedProducts; let i = index">
           <td>{{ product.name }}</td>
-          <td><input 
-            type="number" 
-            class="form-control" 
-            [(ngModel)]="product.count" 
-            [ngModelOptions]="{standalone: true}"
-            (change)="calculateTotal(product)" /></td>
+          <td><input type="number" class="form-control" [(ngModel)]="product.count"
+              [ngModelOptions]="{standalone: true}" (change)="calculateTotal(product)" /></td>
           <td>{{ product.unit_price | currency }}</td>
           <td>{{ product.taxes_code }}%</td>
           <td>{{ product.count * product.unit_price | currency }}</td>
 
-          <td><button class="btn btn-danger" (click)="removeProduct(i)">Eliminar</button></td>
+          <td>
+            <button type="button" class="btn btn-danger" (click)="removeProduct(i)">Eliminar</button>
+          </td>
         </tr>
       </tbody>
     </table>

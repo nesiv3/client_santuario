@@ -78,8 +78,9 @@ export class PurchaseComponent implements OnInit {
 
   calculateTotal(product: any): void {
     product.total = (product.unit_price + (product.unit_price * product.value_taxes) / 100) * product.count;
-
   }
+
+
 
 
   removeProduct(index: number): void {
