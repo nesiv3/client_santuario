@@ -9,6 +9,14 @@
     </button>
   </div>
 
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+  
+
   <span *ngIf="loading" class="spinner-border text-primary spinner-border-sm"></span>
 
   <!-- Barra de búsqueda y botones -->
@@ -17,7 +25,7 @@
       Descargar Excel
     </button>
     <div class="input-group w-50">
-      <input type="text" class="form-control" placeholder="Buscar producto" [(ngModel)]="searchTerm" />
+      <input type="text" class="form-control" placeholder="Buscar producto" [(ngModel)]="searchTerm" (input)="handleInput()" (keyup)="onSearchKeyUp($event)" />
       <button class="btn btn-outline-secondary" (click)="searchProduct()">
         Buscar
       </button>
@@ -79,6 +87,12 @@
         <button type="button" class="btn-close" (click)="closeModal()"></button>
       </div>
       <div class="modal-body">
+        <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
         <div class="mb-3">
           <label for="productCode" class="form-label">Código del Producto:</label>
           <input id="productCode" type="text" class="form-control" [(ngModel)]="productCode" (input)="checkProduct()" />
