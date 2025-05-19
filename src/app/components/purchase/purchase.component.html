@@ -1,8 +1,15 @@
 <div class="container mt-4">
   <h2>Registrar Compra</h2>
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
 
   <!-- Formulario de compra -->
-  <form [formGroup]="purchaseForm" (ngSubmit)="submitPurchase()">
+  <form [formGroup]="purchaseForm">
     <div class="row">
       <div class="col-md-6">
         <label>Fecha</label>
@@ -23,7 +30,9 @@
     <!-- Escanear código de barras -->
     <div class="mt-3">
       <label>Código de Barras</label>
-      <input type="text" class="form-control" formControlName="barcode" (blur)="onBarcodeScan()" />
+      <input type="text" class="form-control" formControlName="barcode" 
+             (keyup.enter)="onBarcodeScan()" 
+             placeholder="Escanea o escribe el código de barras" />
     </div>
 
     <!-- Productos agregados -->
@@ -43,10 +52,11 @@
         <tr *ngFor="let product of selectedProducts; let i = index">
           <td>{{ product.name }}</td>
           <td><input type="number" class="form-control" [(ngModel)]="product.count"
-              [ngModelOptions]="{standalone: true}" (change)="calculateTotal(product)" /></td>
+                     [ngModelOptions]="{standalone: true}" 
+                     (change)="calculateTotal(product)" /></td>
           <td>{{ product.unit_price | currency }}</td>
           <td>{{ product.taxes_code }}%</td>
-          <td>{{ product.count * product.unit_price | currency }}</td>
+          <td>{{  product.count * (product.unit_price +(product.unit_price*product.taxes_code)) | currency }}</td>
 
           <td>
             <button type="button" class="btn btn-danger" (click)="removeProduct(i)">Eliminar</button>
@@ -54,8 +64,24 @@
         </tr>
       </tbody>
     </table>
+    <!-- Sumatoria -->
+<div class="mt-4">
+  <h4>Resumen de la Compra</h4>
+  <div class="d-flex justify-content-between">
+    <span>Subtotal:</span>
+    <span>{{ subtotal | currency }}</span>
+  </div>
+  <div class="d-flex justify-content-between">
+    <span>Impuestos:</span>
+    <span>{{ taxes | currency }}</span>
+  </div>
+  <div class="d-flex justify-content-between fw-bold">
+    <span>Total:</span>
+    <span>{{ totalPrice | currency }}</span>
+  </div>
+</div>
 
     <!-- Botón para registrar compra -->
-    <button type="submit" class="btn btn-success mt-4">Registrar Compra</button>
+    <button type="button" class="btn btn-success mt-4" (click)="submitPurchase()">Registrar Compra</button>
   </form>
 </div>

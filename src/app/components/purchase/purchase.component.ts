@@ -20,6 +20,8 @@ export class PurchaseComponent implements OnInit {
   products: Product[] = [];
   suppliers: Supplier[] = [];
   selectedProducts: any[] = [];
+  successMessage: string = '';
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +32,7 @@ export class PurchaseComponent implements OnInit {
     this.purchaseForm = this.fb.group({
       supplier: ['', Validators.required],
       date: ['', Validators.required],
-      barcode: ['', Validators.required],
+      barcode: ['', [Validators.required, Validators.minLength(5)]],
       count: [1, [Validators.required, Validators.min(1)]]
     });
   }
@@ -40,8 +42,13 @@ export class PurchaseComponent implements OnInit {
   }
 
   loadSuppliers(): void {
-    this.supplierService.getAllSuppliers().subscribe((data) => {
-      this.suppliers = data;
+    this.supplierService.getAllSuppliers().subscribe({
+      next: (data) => {
+        this.suppliers = data;
+      },
+      error: () => {
+        this.showTemporaryMessage('Error al cargar proveedores.', 'error');
+      }
     });
   }
 
@@ -49,46 +56,60 @@ export class PurchaseComponent implements OnInit {
     const barcode = this.purchaseForm.value.barcode;
     if (!barcode) return;
 
-    this.productService.getProductByCode(barcode).subscribe((product) => {
-      if (product) {
-        console.log('Producto encontrado:', product);
-        const existingProduct = this.selectedProducts.find(p => p.id_products === product.id_products);
-        if (existingProduct) {
-          existingProduct.count += this.purchaseForm.value.count;
-          this.calculateTotal(existingProduct);
+    this.productService.getProductByCode(barcode).subscribe({
+      next: (product) => {
+        if (product) {
+          const existingProduct = this.selectedProducts.find(p => p.id_products === product.id_products);
+          if (existingProduct) {
+            existingProduct.count += this.purchaseForm.value.count;
+            this.calculateTotal(existingProduct);
+          } else {
+            const newProduct = {
+              ...product,
+              count: this.purchaseForm.value.count,
+              total: 0
+            };
+            this.selectedProducts.push(newProduct);
+            this.calculateTotal(newProduct);
+          }
         } else {
-          const newProduct = {
-            ...product,
-            count: this.purchaseForm.value.count,
-            total: 0
-          };
-          // this.calculateTotal(newProduct);
-          this.selectedProducts.push(newProduct);
+          this.showTemporaryMessage('Producto no encontrado.', 'error');
         }
-      } else {
-        alert('Producto no encontrado')
+      },
+      error: () => {
+        this.showTemporaryMessage('Error al buscar el producto.', 'error');
       }
-    }, error => {
-      console.error('Error obteniendo producto', error)
-
     });
-    this.purchaseForm.patchValue({ barcode: '' });
+    this.purchaseForm.patchValue({ barcode: '', count: 1 });
 
   }
 
-  calculateTotal(product: any): void {
-    product.total = (product.unit_price + (product.unit_price * product.value_taxes) / 100) * product.count;
-  }
 
+  subtotal: number = 0;
+taxes: number = 0;
+totalPrice: number = 0;
 
+calculateTotal(product: any): void {
+  product.total = (product.unit_price + (product.unit_price * product.taxes_code) / 100) * product.count;
+  this.updateTotals();
+}
 
+updateTotals(): void {
+  this.subtotal = this.selectedProducts.reduce((sum, p) => sum + (p.unit_price * p.count), 0);
+  this.taxes = this.selectedProducts.reduce((sum, p) => sum + ((p.unit_price * p.taxes_code) / 100) * p.count, 0);
+  this.totalPrice = this.subtotal + this.taxes;
+}
 
-  removeProduct(index: number): void {
-    this.selectedProducts.splice(index, 1);
-  }
+removeProduct(index: number): void {
+  this.selectedProducts.splice(index, 1);
+  this.updateTotals();
+}
 
   submitPurchase(): void {
-    if (this.selectedProducts.length === 0) return;
+    if (this.selectedProducts.length === 0) {
+      this.showTemporaryMessage('Debe agregar al menos un producto.', 'error');
+      return;
+    }
 
     const totalCount = this.selectedProducts.reduce((sum, p) => sum + p.count, 0);
     const subtotal = this.selectedProducts.reduce((sum, p) => sum + p.unit_price * p.count, 0);
@@ -98,12 +119,12 @@ export class PurchaseComponent implements OnInit {
     const purchaseData: Purchase = {
       supplier: this.purchaseForm.value.supplier,
       date: this.purchaseForm.value.date,
-      count: totalCount,
-      price: subtotal,
-      taxes: taxes,
-      subtotal: subtotal,
-      total_price: totalPrice, // Se agrega esta propiedad
-      detailPurchasesBody: this.selectedProducts.map(product => ({ // Se corrige el nombre del array
+      count: this.selectedProducts.reduce((sum, p) => sum + p.count, 0),
+      price: this.selectedProducts.reduce((sum, p) => sum + p.unit_price * p.count, 0),
+      taxes: this.selectedProducts.reduce((sum, p) => sum + (p.unit_price * p.taxes_code / 100) * p.count, 0),
+      subtotal: this.selectedProducts.reduce((sum, p) => sum + p.unit_price * p.count, 0),
+      total_price: this.selectedProducts.reduce((sum, p) => sum + p.total, 0),
+      detailPurchasesBody: this.selectedProducts.map(product => ({
         id_products: product.id_products,
         count: product.count,
         unit_price: parseFloat(product.unit_price),
@@ -112,20 +133,30 @@ export class PurchaseComponent implements OnInit {
       }))
     };
 
-    console.log('Compra a enviar:', purchaseData);
-
     this.purchasesService.createPurchase(purchaseData).subscribe({
-      next: (response) => {
-        console.log("Respuesta del backend:", response);
-        alert(response.message);
+      next: () => {
+        this.showTemporaryMessage('Compra finalizada con exito', 'success');
         this.selectedProducts = [];
         this.purchaseForm.reset();
 
       },
-      error: (error) => {
-        console.error("Error en la petición:", error);
-        alert(error.message || "Ocurrió un error al procesar la compra.");
+      error: () => {
+        this.showTemporaryMessage('Error al registrar la compra.', 'error');
       }
     });
   }
+  showTemporaryMessage(message: string, type: 'success' | 'error') {
+    if (type === 'success') {
+      this.successMessage = message;
+    } else {
+      this.errorMessage = message;
+    }
+
+    setTimeout(() => {
+      this.successMessage = '';
+      this.errorMessage = '';
+    }, 3000);
+  }
+
+
 }
