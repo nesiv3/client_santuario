@@ -95,8 +95,8 @@ calculateTotal(product: any): void {
 }
 
 updateTotals(): void {
-  this.subtotal = this.selectedProducts.reduce((sum, p) => sum + (p.unit_price * p.count), 0);
-  this.taxes = this.selectedProducts.reduce((sum, p) => sum + ((p.unit_price * p.taxes_code) / 100) * p.count, 0);
+  this.subtotal = this.selectedProducts.reduce((sum, p) => sum + (p.buy_price * p.count), 0);
+  this.taxes = this.selectedProducts.reduce((sum, p) => sum + ((p.buy_price * p.taxes_code) / 100) * p.count, 0);
   this.totalPrice = this.subtotal + this.taxes;
 }
 

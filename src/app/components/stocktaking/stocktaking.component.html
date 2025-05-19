@@ -100,7 +100,7 @@
 
         <div *ngIf="existingProduct">
           <p><strong>Producto:</strong> {{ productName }}</p>
-          <p><strong>Precio Unidad:</strong> {{ unit_price | currency }}</p>
+          <p><strong>Precio Unidad:</strong> {{ buy_price | currency }}</p>
         </div>
 
         <div *ngIf="!existingProduct" class="mb-3">

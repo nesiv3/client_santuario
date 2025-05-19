@@ -54,9 +54,9 @@
           <td><input type="number" class="form-control" [(ngModel)]="product.count"
                      [ngModelOptions]="{standalone: true}" 
                      (change)="calculateTotal(product)" /></td>
-          <td>{{ product.unit_price | currency }}</td>
+          <td>{{ product.buy_price | currency }}</td>
           <td>{{ product.taxes_code }}%</td>
-          <td>{{  product.count * (product.unit_price +(product.unit_price*product.taxes_code)) | currency }}</td>
+          <td>{{  product.count * (product.buy_price +(product.buy_price*product.taxes_code)) | currency }}</td>
 
           <td>
             <button type="button" class="btn btn-danger" (click)="removeProduct(i)">Eliminar</button>
