@@ -110,7 +110,7 @@ export class StocktakingComponent {
     const product = this.products.find(p => p.code === this.productCode);
     if (product) {
       const newStock = product.stock + this.quantity;
-      const newUnitPrice = this.unit_price;
+      const newUnitPrice = this.buy_price;
 
       this.productsService.updateProductStock(product.id_product, newStock, newUnitPrice).subscribe({
         next: () => {
@@ -191,7 +191,7 @@ export class StocktakingComponent {
       return;
     }
 
-    this.filteredProducts = this.products.filter(product => 
+    this.filteredProducts = this.products.filter(product =>
       product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       product.code.toString().includes(this.searchTerm)
     );
