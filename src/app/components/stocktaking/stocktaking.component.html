@@ -15,7 +15,7 @@
   <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
     {{ errorMessage }}
   </div>
-  
+
 
   <span *ngIf="loading" class="spinner-border text-primary spinner-border-sm"></span>
 
@@ -25,7 +25,8 @@
       Descargar Excel
     </button>
     <div class="input-group w-50">
-      <input type="text" class="form-control" placeholder="Buscar producto" [(ngModel)]="searchTerm" (input)="handleInput()" (keyup)="onSearchKeyUp($event)" />
+      <input type="text" class="form-control" placeholder="Buscar producto" [(ngModel)]="searchTerm"
+        (input)="handleInput()" (keyup)="onSearchKeyUp($event)" />
       <button class="btn btn-outline-secondary" (click)="searchProduct()">
         Buscar
       </button>
@@ -126,6 +127,12 @@
         <div class="mb-3">
           <label for="quantity" class="form-label">Cantidad:</label>
           <input id="quantity" type="number" class="form-control" [(ngModel)]="quantity" min="1" />
+        </div>
+        <div *ngIf="existingProduct" class="form-group">
+          <label for="unit_price">Precio unitario</label>
+          <input type="number" class="form-control" id="unit_price" [(ngModel)]="unit_price" name="unit_price"
+            step="0.01" min="0">
+          <small class="form-text text-muted">Puedes actualizar el precio si ha cambiado.</small>
         </div>
       </div>
       <div class="modal-footer">
