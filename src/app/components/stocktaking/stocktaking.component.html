@@ -46,6 +46,7 @@
           <th>Ganancia</th>
           <th>Precio Unidad</th>
           <th>Precio Total Stock</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -58,6 +59,11 @@
           <td>{{ product.code_earn }}</td>
           <td>{{ product.unit_price | currency }}</td>
           <td>{{ product.stock * product.unit_price | currency }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning" (click)="editProduct(product)">
+              Editar
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -142,6 +148,62 @@
           Guardar
         </button>
         <button class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Edición de Producto -->
+<div *ngIf="showEditModal" class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Producto</h5>
+        <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="editCode" class="form-label">Código</label>
+            <input id="editCode" type="text" class="form-control" [(ngModel)]="editProductData.code" name="edit_code" readonly />
+          </div>
+
+          <div class="mb-3">
+            <label for="editName" class="form-label">Nombre</label>
+            <input id="editName" type="text" class="form-control" [(ngModel)]="editProductData.name" name="edit_name" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="editDescription" class="form-label">Descripción</label>
+            <input id="editDescription" type="text" class="form-control" [(ngModel)]="editProductData.description" name="edit_description" />
+          </div>
+
+          <div class="mb-3">
+            <label for="editBrand" class="form-label">Marca</label>
+            <input id="editBrand" type="text" class="form-control" [(ngModel)]="editProductData.brand" name="edit_brand" />
+          </div>
+
+          <div class="mb-3">
+            <label for="editBuyPrice" class="form-label">Precio Compra</label>
+            <input id="editBuyPrice" type="number" class="form-control" [(ngModel)]="editProductData.buy_price" name="edit_buy_price" min="0" />
+          </div>
+
+          <div class="mb-3">
+            <label for="editCodeEarn" class="form-label">Ganancia (%)</label>
+            <input id="editCodeEarn" type="number" class="form-control" [(ngModel)]="editProductData.code_earn" name="edit_code_earn" min="0" />
+          </div>
+
+          <div class="mb-3">
+            <label for="editTaxes" class="form-label">Impuesto (%)</label>
+            <input id="editTaxes" type="number" class="form-control" [(ngModel)]="editProductData.taxes_code" name="edit_taxes_code" min="0" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="updateProduct()">
+          Actualizar
+        </button>
+        <button class="btn btn-secondary" (click)="closeEditModal()">Cancelar</button>
       </div>
     </div>
   </div>

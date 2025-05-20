@@ -112,7 +112,7 @@ export class StocktakingComponent {
       const newStock = product.stock + this.quantity;
       const newUnitPrice = this.buy_price;
 
-      this.productsService.updateProductStock(product.id_product, newStock, newUnitPrice).subscribe({
+      this.productsService.updateProductStock(product.id_products, newStock, newUnitPrice).subscribe({
         next: () => {
           this.showTemporaryMessage('Stock actualizado correctamente.', 'success');
           this.loadProducts();
@@ -217,6 +217,48 @@ export class StocktakingComponent {
 
     saveAs(data, 'Inventario.xlsx'); // Guarda el archivo
   }
+
+  showEditModal = false;
+  editProductData: any = {};
+
+  editProduct(product: any) {
+
+    this.editProductData = { ...product }; // Copia de los datos
+    this.showEditModal = true;
+  }
+
+  closeEditModal() {
+    this.showEditModal = false;
+    this.editProductData = {};
+  }
+
+  
+    updateProduct() {
+  // Create an object with all the updated fields
+  const updatedProduct = {
+    id_products: this.editProductData.id_products,
+    name: this.editProductData.name,
+    description: this.editProductData.description,
+    brand: this.editProductData.brand,
+    buy_price: this.editProductData.buy_price,
+    code_earn: this.editProductData.code_earn,
+    taxes_code: this.editProductData.taxes_code,
+    stock: this.editProductData.stock,
+    unit_price: this.editProductData.unit_price
+  };
+
+  this.productsService.editProduct(updatedProduct.id_products, updatedProduct).subscribe({
+    next: (response) => {
+      this.showTemporaryMessage('Producto actualizado correctamente', 'success');
+      this.loadProducts(); // Reload the products list
+      this.closeEditModal();
+    },
+    error: (error) => {
+      this.showTemporaryMessage('Error al actualizar el producto', 'error');
+      console.error(error);
+    }
+  });
+}
 
 }
 

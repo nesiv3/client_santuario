@@ -57,8 +57,8 @@ export class ProductService {
   }
 
   // 🔹 Editar producto (actualizar múltiples campos)
-  editProduct(id: string, updatedFields: Partial<Product>): Observable<ApiResponse<Product>> {
-    return this.http.put<ApiResponse<Product>>(`${this.PRODUCT_URL}/${id}`, updatedFields)
+  editProduct(id_products: string, updatedFields: Partial<Product>): Observable<ApiResponse<Product>> {
+    return this.http.put<ApiResponse<Product>>(`${this.PRODUCT_URL}/${id_products}`, updatedFields)
       .pipe(catchError(error => this.handleError('Error al editar el producto', error)));
   }
 
